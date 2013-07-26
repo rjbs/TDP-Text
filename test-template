@@ -1,0 +1,58 @@
+use strict;
+use warnings;
+use Template;
+
+my $template = <<'END';
+[%~
+SET entry = entry_uri.replace('%7Bdate%7D', today.ymd);
+~%]
+The day is almost over!
+ 
+How are you doing today? There's some work that needs to be done, so here is a
+friendly reminder to keep you focused!
+ 
+[% FOREACH category IN categories %]
+[% FOREACH goal IN category.goals %]
+ * [% goal.name | html %]:
+   [%~ FOREACH day IN goal.trend;
+        IF day.defined('quantity'); " ${day.quantity} "; ELSE; " - "; END;
+   END; %]
+[% END %]
+[% END %]
+END
+
+my $stash = {
+  categories => [
+    {
+      goals => [
+        { # also note the ampersand, which should be *literal* in plaintext
+          name  => "Dungeons & Dragons",
+          trend => [
+            { date => '2013-01-01', quantity => 1, streak => 1 },
+            { date => '2013-01-02', quantity => 1,             },
+            { date => '2013-01-02', quantity => 1, streak => 2 },
+            { date => '2013-01-03', quantity => 1,             },
+            { date => '2013-01-04',                            },
+            { date => '2013-01-05',                            },
+            { date => '2013-01-01',                            },
+          ],
+        },
+        {
+          name  => "This is a really really long name and nobody should use a name this long.",
+          trend => [
+            { date => '2013-01-01', quantity => 1, streak => 1 },
+            { date => '2013-01-02', quantity => 1,             },
+            { date => '2013-01-02', quantity => 1, streak => 2 },
+            { date => '2013-01-03', quantity => 1,             },
+            { date => '2013-01-04',                            },
+            { date => '2013-01-05',                            },
+            { date => '2013-01-01',                            },
+          ],
+        },
+      ],
+    }
+  ],
+};
+
+my $tt = Template->new;
+$tt->process(\$template, $stash);
