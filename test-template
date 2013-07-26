@@ -1,7 +1,8 @@
 #!perl
 use strict;
 use warnings;
-use String::Truncate qw(elide);
+use utf8;
+use String::Truncate qw(elide) => { marker => '…' };
 use Template;
 
 my $template = <<'END';
