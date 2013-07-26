@@ -16,7 +16,7 @@ friendly reminder to keep you focused!
  
 [%~ FOREACH category IN categories %]
 [% FOREACH goal IN category.goals %]
- * [% elide(goal.name, 50) %]:
+ * [% elide(goal.name, 40) | format("%-40s") %]:
    [%~ FOREACH day IN goal.trend;
         IF day.defined('quantity'); " ${day.quantity} "; ELSE; " - "; END;
    END; %]
