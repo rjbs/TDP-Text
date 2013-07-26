@@ -1,5 +1,7 @@
+#!perl
 use strict;
 use warnings;
+use String::Truncate qw(elide);
 use Template;
 
 my $template = <<'END';
@@ -13,7 +15,7 @@ friendly reminder to keep you focused!
  
 [% FOREACH category IN categories %]
 [% FOREACH goal IN category.goals %]
- * [% goal.name | html %]:
+ * [% elide(goal.name, 50) | html %]:
    [%~ FOREACH day IN goal.trend;
         IF day.defined('quantity'); " ${day.quantity} "; ELSE; " - "; END;
    END; %]
@@ -22,6 +24,8 @@ friendly reminder to keep you focused!
 END
 
 my $stash = {
+  elide => \&elide,
+
   categories => [
     {
       goals => [
