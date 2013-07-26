@@ -14,7 +14,7 @@ The day is almost over!
 How are you doing today? There's some work that needs to be done, so here is a
 friendly reminder to keep you focused!
  
-[% FOREACH category IN categories %]
+[%~ FOREACH category IN categories %]
 [% FOREACH goal IN category.goals %]
  * [% elide(goal.name, 50) %]:
    [%~ FOREACH day IN goal.trend;
